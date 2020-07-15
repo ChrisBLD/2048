@@ -22,18 +22,20 @@ private:
 	//Is the current tile empty?
 	bool m_isEmpty = true;
 
+	//Combined already this move?
+	bool m_beenCombined = false;
+
 public:
 	Tile();
 	
 	void setValue(int val);
 	void setPosition(Vector2f pos);
-
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	void setCombined(bool dir);
 
 	bool isEmpty();
+
+	int getValue();
+	bool getCombined();
 
 	//Get a copy of the sprite
 	Sprite getSprite();

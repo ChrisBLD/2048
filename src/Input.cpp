@@ -18,6 +18,16 @@ void Engine::input()
 			{
 				m_Playing = true;
 			}
+
+			if (Keyboard::isKeyPressed(Keyboard::D))
+			{
+				m_GB.moveRight();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::A))
+			{
+				m_GB.moveLeft();
+			}
 		}
 	}
 }

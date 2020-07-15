@@ -30,6 +30,12 @@ public:
 	//GameBoard constructor
 	GameBoard();
 
+	//Functions for moving tiles
+	void moveLeft();
+	void moveRight();
+	void moveUp();
+	void moveDown();
+
 	//Return tile array to engine
 	Tile** getTileArray();
 
