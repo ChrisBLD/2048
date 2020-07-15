@@ -33,12 +33,18 @@
     <ClCompile Include="src\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

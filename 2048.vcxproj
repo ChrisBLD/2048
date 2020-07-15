@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="src\Draw.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\GameBoard.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TextureHolder.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\GameBoard.h" />
     <ClInclude Include="src\TextureHolder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

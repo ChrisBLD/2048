@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "TextureHolder.h"
+#include "GameBoard.h"
 
 using namespace sf;
 
@@ -13,11 +14,14 @@ private:
 	//Game window
 	RenderWindow m_Window;
 
-	//Game board texture
-	Texture m_GameBoardTexture;
+	//Game board
+	GameBoard m_GB;
 
 	//How long has the game been running total?
 	Time m_GameTimeTotal;
+
+	//Is the player currently playing?
+	bool m_Playing = false;
 
 	void input();
 	void update(float dtAsSeconds);

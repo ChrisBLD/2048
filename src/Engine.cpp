@@ -10,7 +10,7 @@ Engine::Engine()
 	//Initialise the full screen view
 	m_Window.create(VideoMode(resolution.x, resolution.y), "2048", Style::Fullscreen);
 
-	m_GameBoardTexture = TextureHolder::GetTexture("assets/gameboard.png");
+	
 }
 
 void Engine::run()
