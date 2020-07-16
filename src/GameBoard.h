@@ -23,8 +23,13 @@ private:
 	//Sprite for game board
 	Sprite m_Sprite;
 
-	//2D 4x4 array of tiles
+	//Boolean to monitor if a move has been made or not
+	bool m_moveMade = false;
+
+	//2D 4x4 array of tiles, and a copy
 	Tile** tileArray = new Tile * [4];
+	Tile** tileArrayCopy = new Tile * [4];
+
 
 public:
 	//GameBoard constructor
@@ -35,9 +40,18 @@ public:
 	void moveRight();
 	void moveUp();
 	void moveDown();
+	void setMoveMade(bool dir);
+
+	//Functions for animating movement
+	void animRight();
+
+	//Function for overwriting current tile array with temp tile array
+	void finaliseMovement();
 
 	//Return tile array to engine
 	Tile** getTileArray();
+
+	bool moveBeenMade();
 
 	//Return sprite to engine
 	Sprite getSprite();

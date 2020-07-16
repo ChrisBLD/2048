@@ -28,6 +28,9 @@ private:
 	void draw();
 
 public:
+	//Manages whether the tile animation has started or not
+	bool m_TileAnim = false;
+
 	//The Engine constructor
 	Engine();
 
