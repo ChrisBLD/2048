@@ -4,6 +4,14 @@
 
 using namespace sf;
 
+struct TileCopy {
+	int value;
+	bool combined;
+	int moveTo;
+};
+
+
+
 class GameBoard
 {
 private:
@@ -28,7 +36,9 @@ private:
 
 	//2D 4x4 array of tiles, and a copy
 	Tile** tileArray = new Tile * [4];
-	Tile** tileArrayCopy = new Tile * [4];
+	TileCopy tileArrayCopy[4][4];
+	//TileCopy** tileArrayCopy = new TileCopy * [4];
+	//Tile** tileArrayCopy = new Tile * [4];
 
 
 public:

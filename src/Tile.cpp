@@ -16,19 +16,21 @@ void Tile::update(float elapsedTime)
 	switch (m_Dir)
 	{
 	case 1:
-		//Right
-		if (m_Position.x == maximumX) //If we've moved as far as we need to
+		if (m_inAnim)
 		{
-			m_inAnim = false;
-			m_Position.x = m_StartingPos.x;
-			m_isEmpty = true;
-		}
-		else 
-		{
-			m_Position.x += m_Speed * elapsedTime;
-			if (m_Position.x > maximumX)
+			if (m_Position.x == maximumX) //If we've moved as far as we need to
 			{
-				m_Position.x = maximumX;
+				m_inAnim = false;
+				m_Position.x = m_StartingPos.x;
+				m_isEmpty = true;
+			}
+			else
+			{
+				m_Position.x += m_Speed * elapsedTime;
+				if (m_Position.x > maximumX)
+				{
+					m_Position.x = maximumX;
+				}
 			}
 		}
 		break;

@@ -2,7 +2,6 @@
 #include "TextureHolder.h"
 #include <iostream>
 
-
 GameBoard::GameBoard()
 {
 	m_Texture = TextureHolder::GetTexture("assets/gameboard.png");
@@ -37,6 +36,7 @@ GameBoard::GameBoard()
 	}
 
 
+
 	//Test assignments
 	tileArray[0][0].setValue(2);
 	tileArray[1][0].setValue(2);
@@ -50,15 +50,18 @@ GameBoard::GameBoard()
 void GameBoard::moveRight()
 {
 	setMoveMade(true);
+
+
 	//We want to create a temporary copy of the tile array to hold the state of the board after all changes have been made
 	for (int i = 0; i < 4; i++)
 	{
-		tileArrayCopy[i] = new Tile[4];
 		for (int j = 0; j < 4; j++)
 		{
-			tileArrayCopy[i][j].setValue(tileArray[i][j].getValue());
-			tileArrayCopy[i][j].setCombined(false);
-			tileArray[i][j].setMoveTo(i);
+			tileArrayCopy[i][j].value = tileArray[i][j].getValue();
+			tileArrayCopy[i][j].combined = false;
+			tileArrayCopy[i][j].moveTo = i;
+			//moveTo = -1 is a default value indicating that the tile doesn't need to be moved
+			tileArray[i][j].setMoveTo(-1);
 		}
 	}
 
@@ -70,10 +73,10 @@ void GameBoard::moveRight()
 	{
 		//First we make an array of booleans to track the isEmpty() status of the current row
 		bool empty[4];
-		empty[0] = tileArrayCopy[0][y].isEmpty();
-		empty[1] = tileArrayCopy[1][y].isEmpty();
-		empty[2] = tileArrayCopy[2][y].isEmpty();
-		empty[3] = tileArrayCopy[3][y].isEmpty();
+		empty[0] = (tileArrayCopy[0][y].value == 0);
+		empty[1] = (tileArrayCopy[1][y].value == 0);
+		empty[2] = (tileArrayCopy[2][y].value == 0);
+		empty[3] = (tileArrayCopy[3][y].value == 0);
 
 		for (int x = 2; x >= 0; x--)
 		{
@@ -101,9 +104,9 @@ void GameBoard::moveRight()
 				{				
 					if (maxEmpty != 3)
 					{
-						int currentTileValue = tileArrayCopy[x][y].getValue();
-						int nextTileValue = tileArrayCopy[maxEmpty + 1][y].getValue();
-						if (tileArrayCopy[x][y].getValue() == tileArrayCopy[maxEmpty + 1][y].getValue())
+						int currentTileValue = tileArrayCopy[x][y].value;
+						int nextTileValue = tileArrayCopy[maxEmpty + 1][y].value;
+						if (tileArrayCopy[x][y].value == tileArrayCopy[maxEmpty + 1][y].value)
 						{
 							tileArray[x][y].setMoveTo(maxEmpty+1);
 						}
@@ -114,8 +117,8 @@ void GameBoard::moveRight()
 					}
 
 					//Now we've found the rightmost empty value, we can move our current tile to that location
-					tileArrayCopy[maxEmpty][y].setValue(tileArrayCopy[x][y].getValue());
-					tileArrayCopy[x][y].setValue(0);
+					tileArrayCopy[maxEmpty][y].value = (tileArrayCopy[x][y].value);
+					tileArrayCopy[x][y].value = 0;
 
 					//And of course update the empty array that we're using to track our row
 					empty[x] = true;
@@ -134,26 +137,26 @@ void GameBoard::moveRight()
 		for (int y = 0; y < 4; y++)
 		{
 			//If the tile to the right matches this, then combine
-			if (tileArrayCopy[x][y].getValue() == tileArrayCopy[x + 1][y].getValue())
+			if (tileArrayCopy[x][y].value == tileArrayCopy[x + 1][y].value)
 			{
 				//--only if the tile hasn't already been combined this move
-				if (!tileArrayCopy[x][y].getCombined() && tileArrayCopy[x][y].getValue() != 0)
+				if (!tileArrayCopy[x][y].combined && tileArrayCopy[x][y].value != 0)
 				{
 					//tileArray[x-1]
 					//tileArrayCopy[x][y].setMoveTo(x + 1);
 
-					tileArrayCopy[x + 1][y].setValue(tileArrayCopy[x][y].getValue() + 1);
+					tileArrayCopy[x + 1][y].value = (tileArrayCopy[x][y].value + 1);
 					//tileArray[x][y].setCombined(true);
-					tileArrayCopy[x + 1][y].setCombined(true);
+					tileArrayCopy[x + 1][y].combined = true;
 
-					tileArrayCopy[x][y].setValue(0);
+					tileArrayCopy[x][y].value = 0;
 
 					tileArray[x][y].setMoveTo(x + 1);
 					//After we perform a combination, we need to move all previous tiles along one
 					xLong = x;
 					while (xLong > 0)
 					{
-						tileArrayCopy[xLong][y].setValue(tileArrayCopy[xLong - 1][y].getValue());
+						tileArrayCopy[xLong][y].value = (tileArrayCopy[xLong - 1][y].value);
 						xLong--;
 					}
 
@@ -173,94 +176,7 @@ void GameBoard::moveRight()
 
 void GameBoard::moveLeft()
 {
-	//First we want to reset the value of the beenCombined bool for each tile
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			tileArray[i][j].setCombined(false);
-		}
-	}
-
-	int xLong = 3;
-	int maxEmpty = 3;
-	//When we move left, we don't need to move the tiles in the leftmost column
-	//We work back to front, moving the leftmost tiles first.
-	for (int y = 0; y < 4; y++)
-	{
-		//First we make an array of booleans to track the isEmpty() status of the current row
-		bool empty[4];
-		empty[0] = tileArray[0][y].isEmpty();
-		empty[1] = tileArray[1][y].isEmpty();
-		empty[2] = tileArray[2][y].isEmpty();
-		empty[3] = tileArray[3][y].isEmpty();
-
-		for (int x = 1; x < 4; x++)
-		{
-			//If the current tile is not empty, we need to see how far right we can move
-			if (!empty[x])
-			{
-				//This while loop will check all tiles to the right of the current one to find
-				//the furthest right that is empty, which will be stored in the value maxEmpty.
-				//If we find any value that isn't empty along the way, we must immediately break
-				//from this as we can't jump over tiles with values.
-				xLong = x - 1;
-				while (xLong >= 0)
-				{
-					if (empty[xLong])
-					{
-						maxEmpty = xLong;
-					}
-					else
-					{
-						xLong = 0;
-					}
-					xLong--;
-				}
-				if (maxEmpty != 3)
-				{
-					//Now we've found the rightmost empty value, we can move our current tile to that location
-					tileArray[maxEmpty][y].setValue(tileArray[x][y].getValue());
-					tileArray[x][y].setValue(0);
-					//And of course update the empty array that we're using to track our row
-					empty[x] = true;
-					empty[maxEmpty] = false;
-				}
-			}
-		}
-	}
-
-	xLong = 0;
-	//When combining values after a move left, we don't need to check for the leftmost column
-	for (int x = 3; x >= 1; x--)
-	{
-		for (int y = 0; y < 4; y++)
-		{
-			//If the tile to the left matches this, then combine
-			if (tileArray[x][y].getValue() == tileArray[x - 1][y].getValue())
-			{
-				//--only if the tile hasn't already been combined this move
-				if (!tileArray[x][y].getCombined() && tileArray[x][y].getValue() != 0)
-				{
-					tileArray[x - 1][y].setValue(tileArray[x][y].getValue() + 1);
-					tileArray[x][y].setCombined(true);
-					tileArray[x - 1][y].setCombined(true);
-
-					tileArray[x][y].setValue(0);
-
-					//After we perform a combination, we need to move all previous tiles along one
-					xLong = x;
-					while (xLong < 3)
-					{
-						tileArray[xLong][y].setValue(tileArray[xLong + 1][y].getValue());
-						xLong++;
-					}
-					//if = 11 then we've reached the 2048 tile and the game should end
-				}
-
-			}
-		}
-	}
+	//When moving to the left, we will just rotate the board by 180 and run the moveRight function
 
 }
 
@@ -278,7 +194,7 @@ void GameBoard::animRight()
 		for (int x = 0; x < 4; x++)
 		{
 			//Animate the tile to move to its new location
-			if (tileArray[x][y].getMoveTo() != x)
+			if (tileArray[x][y].getMoveTo() != x && tileArray[x][y].getMoveTo() != -1)
 			{
 				tileArray[x][y].setSpeed(x);
 				tileArray[x][y].setAnimate(true, 1);
@@ -289,20 +205,15 @@ void GameBoard::animRight()
 
 void GameBoard::finaliseMovement()
 {
-	int del = 0;
 	for (int x = 0; x < 4; x++)
 	{
 		for (int y = 0; y < 4; y++)
 		{
-			int test = tileArrayCopy[x][y].getValue();
-			tileArray[x][y].setValue(tileArrayCopy[x][y].getValue());
+			int test = tileArrayCopy[x][y].value;
+			tileArray[x][y].setValue(tileArrayCopy[x][y].value);
 		}
-		delete[] tileArrayCopy[del];
-		del++;
 	}
 
-
-	tileArrayCopy = new Tile * [4];
 	setMoveMade(false);
 }
 

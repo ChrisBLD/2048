@@ -38,7 +38,7 @@ private:
 	//New x/y value that the tile needs to move to
 	int m_moveTo;
 
-	//Bool to track whether tile needs animating
+	//Bool to track whether tile is currently in an animation
 	bool m_inAnim = false;
 
 	//Direction value indicating which direction to move in
