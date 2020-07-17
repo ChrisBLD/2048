@@ -7,6 +7,7 @@ using namespace sf;
 void Engine::update(float dtAsSeconds)
 {
 	bool tilesUpdated = true;
+	bool allEmpty = true;
 
 	for (int x = 0; x < 4; x++)
 	{
@@ -16,13 +17,21 @@ void Engine::update(float dtAsSeconds)
 			{
 				m_GB.getTileArray()[x][y].update(dtAsSeconds);
 				tilesUpdated = false;
+				allEmpty = false;
 			}
-			else
+			else if (!m_GB.getTileArray()[x][y].isEmpty())
 			{
-
+				allEmpty = false;
 			}
 		}
 	}
+
+	//Spawn the first tile
+	if (allEmpty)
+	{
+		m_GB.spawnNextTile();
+	}
+
 
 	if (tilesUpdated && m_GB.moveBeenMade())
 	{

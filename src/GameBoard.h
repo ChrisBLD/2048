@@ -49,13 +49,13 @@ public:
 	GameBoard();
 
 	//Functions for moving tiles
-	void move(Tile** tileArrayToUse);
+	bool move(Tile** tileArrayToUse);
 	void animate(int dir);
 
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	bool moveLeft();
+	bool moveRight();
+	bool moveUp();
+	bool moveDown();
 	void setMoveMade(bool dir);
 
 	//Function for overwriting current tile array with temp tile array

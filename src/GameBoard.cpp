@@ -1,6 +1,5 @@
 #include "GameBoard.h"
 #include "TextureHolder.h"
-#include <iostream>
 #include <map>
 
 GameBoard::GameBoard()
@@ -76,7 +75,7 @@ GameBoard::GameBoard()
 
 }
 
-void GameBoard::move(Tile** tileArrayToUse)
+bool GameBoard::move(Tile** tileArrayToUse)
 {
 	setMoveMade(true);
 
@@ -167,19 +166,6 @@ void GameBoard::move(Tile** tileArrayToUse)
 		}
 
 	}
-	std::cout << "This is the tileArrayCopy state after movement applied:" << endl
-		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
-
-
-	std::cout << "This is where all values need to move to AFTER MOVEMENT:" << endl
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-
 	xLong = 0;
 	//When combining values after a move right, we don't need to check the leftmost column
 	for (int y = 0; y < 4; y++)
@@ -230,29 +216,26 @@ void GameBoard::move(Tile** tileArrayToUse)
 				}
 
 			}
-			/*
-			std::cout << "This is the tileArrayCopy state after stage of the movement:" << endl
-				<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-				<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-				<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-				<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
 
-			std::cout << "This is where all values need to move to after each stage of the movement:" << endl
-				<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-				<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-				<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-				<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-				*/
 		}
 	}
 
-	/*
-	std::cout << "This is the tileArrayCopy state after movement and combination applied:" << endl
-		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
-		*/
+	//When a move is made, it has to move at least one tile. 
+	//If a would-be move doesn't affect any tiles, then return false and it won't be executed.
+	bool moveLegal = false;
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			if (tileArrayToUse[x][y].getMoveTo() != -1)
+			{
+				moveLegal = true;
+			}
+		}
+	}
+
+	return moveLegal;
+
 
 
 }
@@ -289,26 +272,24 @@ void GameBoard::animate(int dir)
 	}
 }
 
-void GameBoard::moveRight()
+bool GameBoard::moveRight()
 {
-	move(tileArray);
 	
-	std::cout << "This is the board state according to tileArray:" << endl
-		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
-		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
-		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
-		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+	bool exec = move(tileArray);
+	
+	if (exec)
+	{
+		animate(1);
+	}
+	else
+	{
+		setMoveMade(false);
+	}
 
-	std::cout << "This is where all values need to move to:" << endl
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-		
-	animate(1);
+	return exec;
 }
 
-void GameBoard::moveLeft()
+bool GameBoard::moveLeft()
 {
 	int moveToX = 0;
 	int moveToY = 0;
@@ -324,7 +305,8 @@ void GameBoard::moveLeft()
 		}
 	}
 
-	move(tileArrayRotate);
+	bool exec = move(tileArrayRotate);
+
 
 
 	//And rotate back before animating
@@ -349,23 +331,20 @@ void GameBoard::moveLeft()
 			tileArrayCopy[valMap[x]][valMap[y]].value = tileArrayCopyRotate[x][y].value;
 		}
 	}
-	/*
-	std::cout << "This is the board state according to tileArray:" << endl
-		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
-		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
-		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
-		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
 
-	std::cout << "This is where all values need to move to:" << endl
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-*/
-	animate(2);
+	if (exec)
+	{
+		animate(2);
+	}
+	else
+	{
+		setMoveMade(false);
+	}
+	
+	return exec;
 }
 
-void GameBoard::moveUp()
+bool GameBoard::moveUp()
 {
 	int moveToX = 0;
 	int moveToY = 0;
@@ -382,7 +361,7 @@ void GameBoard::moveUp()
 	}
 
 
-	move(tileArrayRotate);
+	bool exec = move(tileArrayRotate);
 
 
 	//And rotate back before animating
@@ -408,23 +387,22 @@ void GameBoard::moveUp()
 			tileArrayCopy[y][valMap[x]].value = tileArrayCopyRotate[x][y].value;
 		}
 	}
-	/*
-	std::cout << "This is the board state according to tileArray:" << endl
-		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
-		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
-		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
-		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
 
-	std::cout << "This is where all values need to move to:" << endl
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-*/
-	animate(3);
+
+
+	if (exec)
+	{
+		animate(3);
+	}
+	else
+	{
+		setMoveMade(false);
+	}
+
+	return exec;
 }
 
-void GameBoard::moveDown()
+bool GameBoard::moveDown()
 {
 	int moveToX = 0;
 	int moveToY = 0;
@@ -441,7 +419,7 @@ void GameBoard::moveDown()
 	}
 
 
-	move(tileArrayRotate);
+	bool exec = move(tileArrayRotate);
 
 
 	//And rotate back before animating
@@ -467,20 +445,18 @@ void GameBoard::moveDown()
 			tileArrayCopy[valMap[y]][x].value = tileArrayCopyRotate[x][y].value;
 		}
 	}
-	/*
-	std::cout << "This is the board state according to tileArray:" << endl
-		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
-		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
-		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
-		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
 
-	std::cout << "This is where all values need to move to:" << endl
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-*/
-	animate(4);
+
+	if (exec)
+	{
+		animate(4);
+	}
+	else
+	{
+		setMoveMade(false);
+	}
+
+	return exec;
 }
 
 void GameBoard::setMoveMade(bool dir)
@@ -499,7 +475,6 @@ void GameBoard::finaliseMovement()
 			tileArray[x][y].setValue(tileArrayCopy[x][y].value);
 		}
 	}
-
 	setMoveMade(false);
 }
 
@@ -535,15 +510,6 @@ void GameBoard::spawnNextTile()
 	{
 		tileArray[nextTileLoc.x][nextTileLoc.y].setValue(2);
 	}
-
-	std::cout << endl << "This is the board state AFTER all movement and new tile spawned" << endl
-		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
-		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
-		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
-		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
-
-
-
 }
 
 
@@ -602,7 +568,7 @@ bool GameBoard::isGameOver()
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 Tile** GameBoard::getTileArray()
