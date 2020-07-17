@@ -37,6 +37,9 @@ GameBoard::GameBoard()
 		}
 	}
 
+	//Seed the random number generator
+	srand((int)time(0));
+
 
 
 	//Test assignments
@@ -56,8 +59,14 @@ GameBoard::GameBoard()
 	//tileArray[2][0].setValue(3);
 	//tileArray[3][0].setValue(4);
 
-	//tileArray[0][0].setValue(6);
-	//tileArray[1][0].setValue(5);
+	tileArray[0][3].setValue(1);
+	tileArray[1][3].setValue(0);
+	tileArray[2][3].setValue(1);
+	tileArray[3][3].setValue(2);
+
+	//tileArray[2][3].setValue(2);
+	//tileArray[3][3].setValue(2);
+
 
 	//tileArray[0][0].setValue(0); tileArray[1][0].setValue(1); tileArray[2][0].setValue(0); tileArray[3][0].setValue(3);
 	//tileArray[0][1].setValue(0); tileArray[1][1].setValue(2); tileArray[2][1].setValue(0); tileArray[3][1].setValue(4);
@@ -109,6 +118,7 @@ void GameBoard::move(Tile** tileArrayToUse)
 				//If we find any value that isn't empty along the way, we must immediately break
 				//from this as we can't jump over tiles with values.
 				xLong = x + 1;
+				maxEmpty = 0;
 				while (xLong < 4)
 				{
 					if (empty[xLong])
@@ -155,14 +165,27 @@ void GameBoard::move(Tile** tileArrayToUse)
 
 	}
 
+	std::cout << "This is the tileArrayCopy state after movement applied:" << endl
+		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
+		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
+		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
+		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
+
+
+	std::cout << "This is where all values need to move to AFTER MOVEMENT:" << endl
+		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
+		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
+		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
+		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
+
 	xLong = 0;
-	//When combining values after a move right, we don't need to check the rightmost column
-	for (int x = 0; x < 3; x++)
+	//When combining values after a move right, we don't need to check the leftmost column
+	for (int y = 0; y < 4; y++)
 	{
-		for (int y = 0; y < 4; y++)
+		for (int x = 3; x > 0; x--)
 		{
-			//If the tile to the right matches this, then combine
-			if (tileArrayCopy[x][y].value == tileArrayCopy[x + 1][y].value)
+			//If the tile to the left matches this, then combine
+			if (tileArrayCopy[x][y].value == tileArrayCopy[x - 1][y].value)
 			{
 				//--only if the tile hasn't already been combined this move
 				if (!tileArrayCopy[x][y].combined && tileArrayCopy[x][y].value != 0)
@@ -170,17 +193,18 @@ void GameBoard::move(Tile** tileArrayToUse)
 					//tileArray[x-1]
 					//tileArrayCopy[x][y].setMoveTo(x + 1);
 
-					tileArrayCopy[x + 1][y].value = (tileArrayCopy[x][y].value + 1);
+					tileArrayCopy[x][y].value++;
 					//tileArray[x][y].setCombined(true);
-					tileArrayCopy[x + 1][y].combined = true;
+					tileArrayCopy[x][y].combined = true;
 
-					tileArrayCopy[x][y].value = 0;
+					tileArrayCopy[x - 1][y].value = 0;
 
-					tileArrayToUse[x][y].setMoveTo(x + 1);
+
+					tileArrayToUse[x - 1][y].setMoveTo(x);
 
 					//After we perform a combination, we need to move all previous tiles along one
-					xLong = x;
-					while (xLong > 0)
+					xLong = x-1;
+					while (xLong >= 1)
 					{
 						tileArrayCopy[xLong][y].value = (tileArrayCopy[xLong - 1][y].value);
 						tileArrayCopy[xLong - 1][y].value = 0;
@@ -190,13 +214,31 @@ void GameBoard::move(Tile** tileArrayToUse)
 						}
 						xLong--;
 					}
+					
 
 					//if = 11 then we've reached the 2048 tile and the game should end
 				}
 
 			}
+			std::cout << "This is the tileArrayCopy state after stage of the movement:" << endl
+				<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
+				<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
+				<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
+				<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
+
+
 		}
 	}
+
+
+	std::cout << "This is the tileArrayCopy state after movement and combination applied:" << endl
+		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
+		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
+		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
+		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
+
+
+
 }
 
 
@@ -234,6 +276,19 @@ void GameBoard::animate(int dir)
 void GameBoard::moveRight()
 {
 	move(tileArray);
+
+	std::cout << "This is the board state according to tileArray:" << endl
+		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
+		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
+		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
+		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+
+	std::cout << "This is where all values need to move to:" << endl
+		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
+		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
+		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
+		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
+
 	animate(1);
 }
 
@@ -279,6 +334,17 @@ void GameBoard::moveLeft()
 		}
 	}
 
+	std::cout << "This is the board state according to tileArray:" << endl
+		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
+		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
+		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
+		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+
+	std::cout << "This is where all values need to move to:" << endl
+		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
+		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
+		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
+		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
 
 	animate(2);
 }
@@ -327,6 +393,17 @@ void GameBoard::moveUp()
 		}
 	}
 
+	std::cout << "This is the board state according to tileArray:" << endl
+		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
+		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
+		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
+		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+
+	std::cout << "This is where all values need to move to:" << endl
+		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
+		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
+		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
+		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
 
 	animate(3);
 }
@@ -375,6 +452,18 @@ void GameBoard::moveDown()
 		}
 	}
 
+	std::cout << "This is the board state according to tileArray:" << endl
+		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
+		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
+		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
+		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+
+	std::cout << "This is where all values need to move to:" << endl
+		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
+		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
+		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
+		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
+
 	animate(4);
 }
 
@@ -396,6 +485,49 @@ void GameBoard::finaliseMovement()
 	}
 
 	setMoveMade(false);
+}
+
+
+
+void GameBoard::spawnNextTile()
+{
+	//Here we want to make a new tile appear in an spot that is currently empty.
+	//First, we need to find out which tiles are empty and add them to the emptyTiles array.
+	
+	emptyTiles.clear();
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			if (tileArray[x][y].isEmpty())
+			{
+				emptyTiles.push_back({ x,y });
+			}
+		}
+	}
+
+	//Now we need to select one at random
+	int indexOfNext = rand() % emptyTiles.size();
+	Vector2i nextTileLoc = Vector2i(emptyTiles[indexOfNext].x, emptyTiles[indexOfNext].y);
+
+	//And we drop a 2 tile in there (except for 10% of the time, we drop a 4 tile)
+	if (rand() % 10 < 9)
+	{
+		tileArray[nextTileLoc.x][nextTileLoc.y].setValue(1);
+	}
+	else
+	{
+		tileArray[nextTileLoc.x][nextTileLoc.y].setValue(2);
+	}
+
+	std::cout << endl << "This is the board state AFTER all movement and new tile spawned" << endl
+		<< tileArray[0][0].getValue() << " " << tileArray[1][0].getValue() << " " << tileArray[2][0].getValue() << " " << tileArray[3][0].getValue() << "\n"
+		<< tileArray[0][1].getValue() << " " << tileArray[1][1].getValue() << " " << tileArray[2][1].getValue() << " " << tileArray[3][1].getValue() << "\n"
+		<< tileArray[0][2].getValue() << " " << tileArray[1][2].getValue() << " " << tileArray[2][2].getValue() << " " << tileArray[3][2].getValue() << "\n"
+		<< tileArray[0][3].getValue() << " " << tileArray[1][3].getValue() << " " << tileArray[2][3].getValue() << " " << tileArray[3][3].getValue() << "\n";
+
+
+
 }
 
 Tile** GameBoard::getTileArray()

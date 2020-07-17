@@ -39,8 +39,9 @@ private:
 	TileCopy tileArrayCopy[4][4];
 	Tile** tileArrayRotate = new Tile * [4];
 	TileCopy tileArrayCopyRotate[4][4];
-	//TileCopy** tileArrayCopy = new TileCopy * [4];
-	//Tile** tileArrayCopy = new Tile * [4];
+	
+	//Create an array of coordinates for empty tiles
+	std::vector<Vector2i> emptyTiles = { {} };
 
 
 public:
@@ -60,6 +61,9 @@ public:
 
 	//Function for overwriting current tile array with temp tile array
 	void finaliseMovement();
+
+	//Function for spawning new tile after a move has been made
+	void spawnNextTile();
 
 	//Return tile array to engine
 	Tile** getTileArray();

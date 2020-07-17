@@ -27,6 +27,7 @@ void Engine::update(float dtAsSeconds)
 	if (tilesUpdated && m_GB.moveBeenMade())
 	{
 		m_GB.finaliseMovement();
+		m_GB.spawnNextTile();
 	}
 
 
