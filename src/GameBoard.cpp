@@ -54,23 +54,23 @@ GameBoard::GameBoard()
 
 	//tileArray[3][0].setValue(5);
 
-	tileArray[0][3].setValue(1);
-    tileArray[1][3].setValue(0);
-	tileArray[2][3].setValue(1);
-	tileArray[3][3].setValue(1);
+	//tileArray[0][3].setValue(1);
+    //tileArray[1][3].setValue(0);
+	//tileArray[2][3].setValue(1);
+	//tileArray[3][3].setValue(1);
 
 	////tileArray[0][0].setValue(1);
-	tileArray[1][0].setValue(1);
+	//tileArray[1][0].setValue(1);
 
 
 	//tileArray[2][3].setValue(2);
 	//tileArray[3][3].setValue(2);
 
 
-	//tileArray[0][0].setValue(0); tileArray[1][0].setValue(1); tileArray[2][0].setValue(0); tileArray[3][0].setValue(3);
-	//tileArray[0][1].setValue(0); tileArray[1][1].setValue(2); tileArray[2][1].setValue(0); tileArray[3][1].setValue(4);
-	//tileArray[0][2].setValue(0); tileArray[1][2].setValue(6); tileArray[2][2].setValue(2); tileArray[3][2].setValue(2);
-	//tileArray[0][3].setValue(2); tileArray[1][3].setValue(5); tileArray[2][3].setValue(3); tileArray[3][3].setValue(1);
+	//tileArray[0][0].setValue(3); tileArray[1][0].setValue(4); tileArray[2][0].setValue(3); tileArray[3][0].setValue(4);
+	//tileArray[0][1].setValue(4); tileArray[1][1].setValue(3); tileArray[2][1].setValue(4); tileArray[3][1].setValue(3);
+	//tileArray[0][2].setValue(3); tileArray[1][2].setValue(4); tileArray[2][2].setValue(3); tileArray[3][2].setValue(4);
+	//tileArray[0][3].setValue(6); tileArray[1][3].setValue(5); tileArray[2][3].setValue(1); tileArray[3][3].setValue(1);
 
 	
 
@@ -546,6 +546,65 @@ void GameBoard::spawnNextTile()
 
 }
 
+
+bool GameBoard::isGameOver()
+{
+	//Now we've made another move, we can check if the game is over.
+	//If the game is over, the board must be full:
+	bool boardFull = true;
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			if (tileArray[x][y].isEmpty())
+			{
+				boardFull = false;
+			}
+		}
+	}
+
+	//If the board is full we need to check whether any moves can be made that make combinations
+	//Each tile (x, y) needs to check the tiles (x + 1, y) and (x, y + 1) - unless x || y = 3, which we'll do separately
+	if (boardFull)
+	{
+		bool gameOver = true;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				int value = tileArray[x][y].getValue();
+				if (value == tileArray[x + 1][y].getValue() || value == tileArray[x][y + 1].getValue())
+				{
+					gameOver = false;
+				}
+			}
+		}
+		//Now, we check for all values with x = 3 || y = 3
+		for (int x = 0; x < 3; x++)
+		{
+			int value = tileArray[x][3].getValue();
+			if (value == tileArray[x + 1][3].getValue())
+			{
+				gameOver = false;
+			}
+		}
+		for (int y = 0; y < 3; y++)
+		{
+			int value = tileArray[3][y].getValue();
+			if (value == tileArray[3][y+1].getValue())
+			{
+				gameOver = false;
+			}
+		}
+
+		if (gameOver)
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
 Tile** GameBoard::getTileArray()
 {
 	return tileArray;

@@ -28,6 +28,11 @@ void Engine::update(float dtAsSeconds)
 	{
 		m_GB.finaliseMovement();
 		m_GB.spawnNextTile();
+		if (m_GB.isGameOver())
+		{
+			//Game over handling
+			std::cout << "Game Over!" << endl;
+		}
 	}
 
 

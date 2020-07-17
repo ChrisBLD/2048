@@ -58,12 +58,14 @@ public:
 	void moveDown();
 	void setMoveMade(bool dir);
 
-
 	//Function for overwriting current tile array with temp tile array
 	void finaliseMovement();
 
 	//Function for spawning new tile after a move has been made
 	void spawnNextTile();
+
+	//Function for checking if a game has finished
+	bool isGameOver();
 
 	//Return tile array to engine
 	Tile** getTileArray();
