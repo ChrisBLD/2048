@@ -40,10 +40,29 @@ GameBoard::GameBoard()
 
 
 	//Test assignments
-	tileArray[0][0].setValue(4);
-	tileArray[0][1].setValue(3);
-	tileArray[0][2].setValue(2);
-	tileArray[0][3].setValue(2);
+	//tileArray[0][0].setValue(4);
+	//tileArray[0][1].setValue(3);
+	//tileArray[0][2].setValue(2);
+	//tileArray[0][3].setValue(2);
+
+	//tileArray[0][2].setValue(3);
+	//tileArray[0][3].setValue(3);
+
+
+	//tileArray[3][0].setValue(5);
+
+	//tileArray[0][0].setValue(2);
+	//tileArray[1][0].setValue(2);
+	//tileArray[2][0].setValue(3);
+	//tileArray[3][0].setValue(4);
+
+	//tileArray[0][0].setValue(6);
+	//tileArray[1][0].setValue(5);
+
+	//tileArray[0][0].setValue(0); tileArray[1][0].setValue(1); tileArray[2][0].setValue(0); tileArray[3][0].setValue(3);
+	//tileArray[0][1].setValue(0); tileArray[1][1].setValue(2); tileArray[2][1].setValue(0); tileArray[3][1].setValue(4);
+	//tileArray[0][2].setValue(0); tileArray[1][2].setValue(6); tileArray[2][2].setValue(2); tileArray[3][2].setValue(2);
+	//tileArray[0][3].setValue(2); tileArray[1][3].setValue(5); tileArray[2][3].setValue(3); tileArray[3][3].setValue(1);
 
 	
 
@@ -112,6 +131,10 @@ void GameBoard::move(Tile** tileArrayToUse)
 						{
 							tileArrayToUse[x][y].setMoveTo(maxEmpty + 1);
 						}
+						else
+						{
+							tileArrayToUse[x][y].setMoveTo(maxEmpty);
+						}
 					}
 					else
 					{
@@ -161,7 +184,10 @@ void GameBoard::move(Tile** tileArrayToUse)
 					{
 						tileArrayCopy[xLong][y].value = (tileArrayCopy[xLong - 1][y].value);
 						tileArrayCopy[xLong - 1][y].value = 0;
-						tileArrayToUse[xLong - 1][y].setMoveTo(xLong);
+						if (tileArrayToUse[xLong - 1][y].getMoveTo() == -1)
+						{
+							tileArrayToUse[xLong - 1][y].setMoveTo(xLong);
+						}
 						xLong--;
 					}
 
@@ -171,11 +197,6 @@ void GameBoard::move(Tile** tileArrayToUse)
 			}
 		}
 	}
-	std::cout << "Tile Struct Array after transforms!: " << "\n"
-		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
 }
 
 
@@ -187,17 +208,24 @@ void GameBoard::animate(int dir)
 		for (int x = 0; x < 4; x++)
 		{
 			//Animate the tile to move to its new location
-			if (tileArray[x][y].getMoveTo() != x && tileArray[x][y].getMoveTo() != -1)
+			int getMoveTo = tileArray[x][y].getMoveTo();
+			if (dir == 1 || dir == 2)
 			{
-				if (dir == 3 || dir == 4)
-				{
-					tileArray[x][y].setSpeed(y);
-				}
-				else
+				//Left or Right
+				if (tileArray[x][y].getMoveTo() != x && tileArray[x][y].getMoveTo() != -1)
 				{
 					tileArray[x][y].setSpeed(x);
+					tileArray[x][y].setAnimate(true, dir);
 				}
-				tileArray[x][y].setAnimate(true, dir);
+			}
+			else
+			{
+				//Up or down
+				if (tileArray[x][y].getMoveTo() != y && tileArray[x][y].getMoveTo() != -1)
+				{
+					tileArray[x][y].setSpeed(y);
+					tileArray[x][y].setAnimate(true, dir);
+				}
 			}
 		}
 	}
@@ -251,26 +279,56 @@ void GameBoard::moveLeft()
 		}
 	}
 
-	std::cout << "Tile Array Copy Rotate after Rotate: " << "\n"
-		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
-
-	std::cout << "Tile Copy Rotate Move To: " << "\n"
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-
-
 
 	animate(2);
 }
 
 void GameBoard::moveUp()
 {
-//DO THIS!
+	int moveToX = 0;
+	int moveToY = 0;
+
+	std::map<int, int> valMap = { {0,3},{1,2},{2,1},{3,0},{-1,-1} };
+
+	//When moving up, we will just rotate the board by 90 and run the moveRight function
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			tileArrayRotate[x][y].setValue(tileArray[y][valMap[x]].getValue());
+		}
+	}
+
+
+	move(tileArrayRotate);
+
+
+	//And rotate back before animating
+
+	TileCopy tileArrayCopyRotate[4][4];
+
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			tileArray[y][valMap[x]].setValue(tileArrayRotate[x][y].getValue());
+
+			tileArray[x][y].setMoveTo(valMap[tileArrayRotate[valMap[y]][x].getMoveTo()]);
+			tileArrayCopyRotate[x][y].value = tileArrayCopy[x][y].value;
+		}
+	}
+
+	//And rotate the array of structures we made back
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			tileArrayCopy[y][valMap[x]].value = tileArrayCopyRotate[x][y].value;
+		}
+	}
+
+
+	animate(3);
 }
 
 void GameBoard::moveDown()
@@ -316,21 +374,6 @@ void GameBoard::moveDown()
 			tileArrayCopy[valMap[y]][x].value = tileArrayCopyRotate[x][y].value;
 		}
 	}
-
-	std::cout << "Tile Array Rotate after Rotate: " << "\n"
-		<< tileArrayCopy[0][0].value << " " << tileArrayCopy[1][0].value << " " << tileArrayCopy[2][0].value << " " << tileArrayCopy[3][0].value << "\n"
-		<< tileArrayCopy[0][1].value << " " << tileArrayCopy[1][1].value << " " << tileArrayCopy[2][1].value << " " << tileArrayCopy[3][1].value << "\n"
-		<< tileArrayCopy[0][2].value << " " << tileArrayCopy[1][2].value << " " << tileArrayCopy[2][2].value << " " << tileArrayCopy[3][2].value << "\n"
-		<< tileArrayCopy[0][3].value << " " << tileArrayCopy[1][3].value << " " << tileArrayCopy[2][3].value << " " << tileArrayCopy[3][3].value << "\n";
-
-
-	std::cout << "Tile Copy Rotate Move To: " << "\n"
-		<< tileArray[0][0].getMoveTo() << " " << tileArray[1][0].getMoveTo() << " " << tileArray[2][0].getMoveTo() << " " << tileArray[3][0].getMoveTo() << "\n"
-		<< tileArray[0][1].getMoveTo() << " " << tileArray[1][1].getMoveTo() << " " << tileArray[2][1].getMoveTo() << " " << tileArray[3][1].getMoveTo() << "\n"
-		<< tileArray[0][2].getMoveTo() << " " << tileArray[1][2].getMoveTo() << " " << tileArray[2][2].getMoveTo() << " " << tileArray[3][2].getMoveTo() << "\n"
-		<< tileArray[0][3].getMoveTo() << " " << tileArray[1][3].getMoveTo() << " " << tileArray[2][3].getMoveTo() << " " << tileArray[3][3].getMoveTo() << "\n";
-
-
 
 	animate(4);
 }
