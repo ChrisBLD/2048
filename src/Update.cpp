@@ -7,7 +7,7 @@ using namespace sf;
 void Engine::update(float dtAsSeconds)
 {
 	bool tilesUpdated = true;
-	bool allEmpty = true;
+	int numFull = 0;
 
 	for (int x = 0; x < 4; x++)
 	{
@@ -17,19 +17,20 @@ void Engine::update(float dtAsSeconds)
 			{
 				m_GB.getTileArray()[x][y].update(dtAsSeconds);
 				tilesUpdated = false;
-				allEmpty = false;
+				numFull++;
 			}
 			else if (!m_GB.getTileArray()[x][y].isEmpty())
 			{
-				allEmpty = false;
+				numFull++;
 			}
 		}
 	}
 
-	//Spawn the first tile
-	if (allEmpty)
+	//Spawn the first tiles and set score to 0
+	if (numFull <= 1)
 	{
 		m_GB.spawnNextTile();
+		m_HUD.setScore(0);
 	}
 
 
@@ -37,9 +38,10 @@ void Engine::update(float dtAsSeconds)
 	{
 		m_GB.finaliseMovement();
 		m_GB.spawnNextTile();
+		m_HUD.setScore(m_GB.score());
 		if (m_GB.isGameOver())
 		{
-			//Game over handling
+			m_Playing = false;
 			std::cout << "Game Over!" << endl;
 		}
 	}

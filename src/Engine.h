@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "TextureHolder.h"
 #include "GameBoard.h"
+#include "Hud.h"
 
 using namespace sf;
 
@@ -16,6 +17,10 @@ private:
 
 	//Game board
 	GameBoard m_GB;
+
+	//HUD
+
+	Hud m_HUD;
 
 	//How long has the game been running total?
 	Time m_GameTimeTotal;

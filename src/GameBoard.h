@@ -34,6 +34,9 @@ private:
 	//Boolean to monitor if a move has been made or not
 	bool m_moveMade = false;
 
+	//Integer to track score to add to UI
+	int m_Score;
+
 	//2D 4x4 array of tiles, a copy for rotation and an array of structures for processing moves
 	Tile** tileArray = new Tile * [4];
 	TileCopy tileArrayCopy[4][4];
@@ -70,7 +73,11 @@ public:
 	//Return tile array to engine
 	Tile** getTileArray();
 
+	//Check if a move has been made
 	bool moveBeenMade();
+
+	//See what score we need to add
+	int score();
 
 	//Return sprite to engine
 	Sprite getSprite();

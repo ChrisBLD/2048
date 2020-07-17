@@ -1,6 +1,7 @@
 #include "GameBoard.h"
 #include "TextureHolder.h"
 #include <map>
+#include <iostream>
 
 GameBoard::GameBoard()
 {
@@ -39,6 +40,8 @@ GameBoard::GameBoard()
 	//Seed the random number generator
 	srand((int)time(0));
 
+	//Set the score to 0
+	m_Score = 0;
 
 
 	//Test assignments
@@ -66,10 +69,10 @@ GameBoard::GameBoard()
 	//tileArray[3][3].setValue(2);
 
 
-	//tileArray[0][0].setValue(3); tileArray[1][0].setValue(4); tileArray[2][0].setValue(3); tileArray[3][0].setValue(4);
-	//tileArray[0][1].setValue(4); tileArray[1][1].setValue(3); tileArray[2][1].setValue(4); tileArray[3][1].setValue(3);
-	//tileArray[0][2].setValue(3); tileArray[1][2].setValue(4); tileArray[2][2].setValue(3); tileArray[3][2].setValue(4);
-	//tileArray[0][3].setValue(6); tileArray[1][3].setValue(5); tileArray[2][3].setValue(1); tileArray[3][3].setValue(1);
+	tileArray[0][0].setValue(3); tileArray[1][0].setValue(4); tileArray[2][0].setValue(3); tileArray[3][0].setValue(4);
+	tileArray[0][1].setValue(4); tileArray[1][1].setValue(3); tileArray[2][1].setValue(4); tileArray[3][1].setValue(3);
+	tileArray[0][2].setValue(3); tileArray[1][2].setValue(4); tileArray[2][2].setValue(3); tileArray[3][2].setValue(4);
+	tileArray[0][3].setValue(6); tileArray[1][3].setValue(5); tileArray[2][3].setValue(1); tileArray[3][3].setValue(1);
 
 	
 
@@ -78,7 +81,6 @@ GameBoard::GameBoard()
 bool GameBoard::move(Tile** tileArrayToUse)
 {
 	setMoveMade(true);
-
 
 	//We want to create a temporary copy of the tile array to hold the state of the board after all changes have been made
 	for (int i = 0; i < 4; i++)
@@ -178,18 +180,13 @@ bool GameBoard::move(Tile** tileArrayToUse)
 				//--only if the tile hasn't already been combined this move
 				if (!tileArrayCopy[x][y].combined && tileArrayCopy[x][y].value != 0)
 				{
-					//tileArray[x-1]
-					//tileArrayCopy[x][y].setMoveTo(x + 1);
-
 					tileArrayCopy[x][y].value++;
-					//tileArray[x][y].setCombined(true);
 					tileArrayCopy[x][y].combined = true;
-
 					tileArrayCopy[x - 1][y].value = 0;
-
-
 					tileArrayToUse[x - 1][y].setMoveTo(x);
 
+					m_Score += pow(2, tileArrayCopy[x][y].value);
+					
 					//After we perform a combination, we need to move all previous tiles along one
 					xLong = x-1;
 					while (xLong >= 1)
@@ -235,9 +232,6 @@ bool GameBoard::move(Tile** tileArrayToUse)
 	}
 
 	return moveLegal;
-
-
-
 }
 
 
@@ -571,6 +565,7 @@ bool GameBoard::isGameOver()
 
 	return false;
 }
+
 Tile** GameBoard::getTileArray()
 {
 	return tileArray;
@@ -579,6 +574,11 @@ Tile** GameBoard::getTileArray()
 bool GameBoard::moveBeenMade()
 {
 	return m_moveMade;
+}
+
+int GameBoard::score()
+{
+	return m_Score;
 }
 
 Sprite GameBoard::getSprite()

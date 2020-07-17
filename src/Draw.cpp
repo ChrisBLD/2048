@@ -18,5 +18,14 @@ void Engine::draw()
 		}
 	}
 
+
+	m_Window.draw(m_HUD.getScore());
+	
+	if (!m_Playing)
+	{
+		m_Window.draw(m_HUD.getGameOver());
+	}
+
+
 	m_Window.display();
 }

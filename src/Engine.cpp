@@ -7,16 +7,15 @@ Engine::Engine()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
-	//Initialise the full screen view
 	m_Window.create(VideoMode(resolution.x, resolution.y), "2048", Style::Fullscreen);
 
-	
 }
 
 void Engine::run()
 {
 	//Timing
 	Clock clock;
+	m_Playing = true;
 
 	while (m_Window.isOpen())
 	{

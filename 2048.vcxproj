@@ -152,6 +152,7 @@
     <ClCompile Include="src\Draw.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\GameBoard.cpp" />
+    <ClCompile Include="src\Hud.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TextureHolder.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\GameBoard.h" />
+    <ClInclude Include="src\Hud.h" />
     <ClInclude Include="src\TextureHolder.h" />
     <ClInclude Include="src\Tile.h" />
   </ItemGroup>
