@@ -19,14 +19,22 @@ void Engine::input()
 				m_Playing = true;
 			}
 
-			if (Keyboard::isKeyPressed(Keyboard::D))
+			if (Keyboard::isKeyPressed(Keyboard::D) && !m_GB.moveBeenMade())
 			{
 				m_GB.moveRight();
 			}
 
-			if (Keyboard::isKeyPressed(Keyboard::A))
+			if (Keyboard::isKeyPressed(Keyboard::A) && !m_GB.moveBeenMade())
 			{
 				m_GB.moveLeft();
+			}
+			if (Keyboard::isKeyPressed(Keyboard::W) && !m_GB.moveBeenMade())
+			{
+				m_GB.moveUp();
+			}
+			if (Keyboard::isKeyPressed(Keyboard::S) && !m_GB.moveBeenMade())
+			{
+				m_GB.moveDown();
 			}
 		}
 	}

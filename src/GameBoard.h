@@ -34,9 +34,11 @@ private:
 	//Boolean to monitor if a move has been made or not
 	bool m_moveMade = false;
 
-	//2D 4x4 array of tiles, and a copy
+	//2D 4x4 array of tiles, a copy for rotation and an array of structures for processing moves
 	Tile** tileArray = new Tile * [4];
 	TileCopy tileArrayCopy[4][4];
+	Tile** tileArrayRotate = new Tile * [4];
+	TileCopy tileArrayCopyRotate[4][4];
 	//TileCopy** tileArrayCopy = new TileCopy * [4];
 	//Tile** tileArrayCopy = new Tile * [4];
 
@@ -46,14 +48,15 @@ public:
 	GameBoard();
 
 	//Functions for moving tiles
+	void move(Tile** tileArrayToUse);
+	void animate(int dir);
+
 	void moveLeft();
 	void moveRight();
 	void moveUp();
 	void moveDown();
 	void setMoveMade(bool dir);
 
-	//Functions for animating movement
-	void animRight();
 
 	//Function for overwriting current tile array with temp tile array
 	void finaliseMovement();

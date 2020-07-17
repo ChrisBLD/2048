@@ -20,11 +20,14 @@ private:
 	Texture m_Texture;
 
 	//How fast do tiles move?
+	const float BASE_SPEED = 300;
+
+	//Actual speed of tile
 	float m_Speed = 300;
 
 
 	//Constant value for the location of the board
-	const float BOARD_LOC = (VideoMode::getDesktopMode().width - 700.0f) / 2.0f;
+	const Vector2f BOARD_LOC = Vector2f((VideoMode::getDesktopMode().width - 700.0f) / 2.0f, (VideoMode::getDesktopMode().height - 700.0f) / 2.0f);
 
 	//Value of current tile = 2 * valueMultiplier
 	int m_ValueMultiplier = 0;

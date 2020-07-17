@@ -8,14 +8,17 @@
 Tile::Tile()
 {
 	m_ValueMultiplier = 0;
+	m_moveTo = -1;
 }
 
 void Tile::update(float elapsedTime)
 {
-	float maximumX = BOARD_LOC + 40.0f + (m_moveTo * 160.0f);
+	float maximumX = BOARD_LOC.x + 40.0f + (m_moveTo * 160.0f);
+	float maximumY = BOARD_LOC.y + 40.0f + (m_moveTo * 160.0f);
 	switch (m_Dir)
 	{
 	case 1:
+		//Right
 		if (m_inAnim)
 		{
 			if (m_Position.x == maximumX) //If we've moved as far as we need to
@@ -36,12 +39,63 @@ void Tile::update(float elapsedTime)
 		break;
 	case 2:
 		//Left
+		if (m_inAnim)
+		{
+			if (m_Position.x == maximumX) //If we've moved as far as we need to
+			{
+				m_inAnim = false;
+				m_Position.x = m_StartingPos.x;
+				m_isEmpty = true;
+			}
+			else
+			{
+				m_Position.x -= m_Speed * elapsedTime;
+				if (m_Position.x < maximumX)
+				{
+					m_Position.x = maximumX;
+				}
+			}
+		}
 		break;
 	case 3:
 		//Up
+		if (m_inAnim)
+		{
+			if (m_Position.y == maximumY) //If we've moved as far as we need to
+			{
+				m_inAnim = false;
+				m_Position.y = m_StartingPos.y;
+				m_isEmpty = true;
+			}
+			else
+			{
+				m_Position.y -= m_Speed * elapsedTime;
+				if (m_Position.y < maximumY)
+				{
+					m_Position.y = maximumY;
+				}
+			}
+		}
 		break;
 	case 4:
 		//Down
+		if (m_inAnim)
+		{
+			if (m_Position.y == maximumY) //If we've moved as far as we need to
+			{
+				m_inAnim = false;
+				m_Position.y = m_StartingPos.y;
+				m_isEmpty = true;
+			}
+			else
+			{
+				m_Position.y += m_Speed * elapsedTime;
+				if (m_Position.y > maximumY)
+				{
+					m_Position.y = maximumY;
+				}
+			}
+		}
 		break;
 	}
 	m_Sprite.setPosition(m_Position);
@@ -102,7 +156,7 @@ void Tile::setAnimate(bool anim, int dir)
 
 void Tile::setSpeed(int currentPos)
 {
-	m_Speed = m_Speed * abs(m_moveTo - currentPos);
+	m_Speed = BASE_SPEED * abs(m_moveTo - currentPos);
 }
 
 bool Tile::isEmpty()
