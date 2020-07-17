@@ -7,8 +7,7 @@
 
 Tile::Tile()
 {
-	m_ValueMultiplier = 0;
-	m_moveTo = -1;
+	restart();
 }
 
 void Tile::update(float elapsedTime)
@@ -187,4 +186,14 @@ bool Tile::needsAnimating()
 Sprite Tile::getSprite()
 {
 	return m_Sprite;
+}
+
+void Tile::restart()
+{
+	m_ValueMultiplier = 0;
+	m_moveTo = -1;
+	m_inAnim = false;
+	m_beenCombined = false;
+	m_isEmpty = true;
+	m_Dir = 0;
 }

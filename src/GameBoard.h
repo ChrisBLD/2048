@@ -81,4 +81,7 @@ public:
 
 	//Return sprite to engine
 	Sprite getSprite();
+
+	//Restart the board
+	void restart();
 };

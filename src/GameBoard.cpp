@@ -45,6 +45,7 @@ GameBoard::GameBoard()
 
 
 	//Test assignments
+
 	//tileArray[0][0].setValue(4);
 	//tileArray[0][1].setValue(3);
 	//tileArray[0][2].setValue(2);
@@ -69,10 +70,10 @@ GameBoard::GameBoard()
 	//tileArray[3][3].setValue(2);
 
 
-	tileArray[0][0].setValue(3); tileArray[1][0].setValue(4); tileArray[2][0].setValue(3); tileArray[3][0].setValue(4);
-	tileArray[0][1].setValue(4); tileArray[1][1].setValue(3); tileArray[2][1].setValue(4); tileArray[3][1].setValue(3);
-	tileArray[0][2].setValue(3); tileArray[1][2].setValue(4); tileArray[2][2].setValue(3); tileArray[3][2].setValue(4);
-	tileArray[0][3].setValue(6); tileArray[1][3].setValue(5); tileArray[2][3].setValue(1); tileArray[3][3].setValue(1);
+	//tileArray[0][0].setValue(3); tileArray[1][0].setValue(4); tileArray[2][0].setValue(3); tileArray[3][0].setValue(4);
+	//tileArray[0][1].setValue(4); tileArray[1][1].setValue(3); tileArray[2][1].setValue(4); tileArray[3][1].setValue(3);
+	//tileArray[0][2].setValue(3); tileArray[1][2].setValue(4); tileArray[2][2].setValue(3); tileArray[3][2].setValue(4);
+	//tileArray[0][3].setValue(6); tileArray[1][3].setValue(5); tileArray[2][3].setValue(1); tileArray[3][3].setValue(1);
 
 	
 
@@ -584,4 +585,18 @@ int GameBoard::score()
 Sprite GameBoard::getSprite()
 {
 	return m_Sprite;
+}
+
+void GameBoard::restart()
+{
+	//Restart the tile array
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			tileArray[x][y].restart();
+		}
+	}
+
+	m_Score = 0;
 }

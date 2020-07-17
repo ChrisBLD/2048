@@ -20,10 +20,10 @@ private:
 	Texture m_Texture;
 
 	//How fast do tiles move?
-	const float BASE_SPEED = 300;
+	const float BASE_SPEED = 1000;
 
 	//Actual speed of tile
-	float m_Speed = 300;
+	float m_Speed = 1000;
 
 
 	//Constant value for the location of the board
@@ -33,19 +33,19 @@ private:
 	int m_ValueMultiplier = 0;
 
 	//Is the current tile empty?
-	bool m_isEmpty = true;
+	bool m_isEmpty;
 
 	//Combined already this move?
-	bool m_beenCombined = false;
+	bool m_beenCombined;
 
 	//New x/y value that the tile needs to move to
 	int m_moveTo;
 
 	//Bool to track whether tile is currently in an animation
-	bool m_inAnim = false;
+	bool m_inAnim;
 
 	//Direction value indicating which direction to move in
-	int m_Dir = 0;
+	int m_Dir;
 
 public:
 	Tile();
@@ -70,4 +70,6 @@ public:
 
 	//Get a copy of the sprite
 	Sprite getSprite();
+
+	void restart();
 };

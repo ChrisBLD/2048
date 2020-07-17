@@ -16,6 +16,7 @@ void Engine::input()
 			//Handle the player starting the game
 			if (Keyboard::isKeyPressed(Keyboard::Return))
 			{
+				m_GB.restart();
 				m_Playing = true;
 			}
 
