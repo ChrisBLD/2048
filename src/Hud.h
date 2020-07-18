@@ -18,4 +18,5 @@ public:
 	Text getGameOver();
 
 	void setScore(int score);
+	void setGameOver(bool win);
 };

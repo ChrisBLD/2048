@@ -68,7 +68,7 @@ public:
 	void spawnNextTile();
 
 	//Function for checking if a game has finished
-	bool isGameOver();
+	int isGameOver();
 
 	//Return tile array to engine
 	Tile** getTileArray();

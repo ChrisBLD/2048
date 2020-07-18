@@ -22,7 +22,7 @@ Hud::Hud()
 	m_GameOverText.setFont(m_Font);
 	m_GameOverText.setCharacterSize(80);
 	m_GameOverText.setFillColor(Color::Black);
-	m_GameOverText.setString("Game Over! Press Enter to restart");
+	setGameOver(false);
 
 	//Position the GameOver text
 	textRect = m_GameOverText.getLocalBounds();
@@ -45,4 +45,16 @@ void Hud::setScore(int score)
 	std::stringstream ss;
 	ss << SCORE_MSG << score;
 	m_ScoreText.setString(ss.str());
+}
+
+void Hud::setGameOver(bool win)
+{
+	if (win)
+	{
+		m_GameOverText.setString("You win! Press Enter to restart");
+	}
+	else
+	{
+		m_GameOverText.setString("Game Over! Press Enter to restart");
+	}
 }

@@ -49,8 +49,9 @@ GameBoard::GameBoard()
 	//tileArray[0][2].setValue(1);
 	//tileArray[0][3].setValue(3);
 
-	//tileArray[0][2].setValue(3);
-	//tileArray[0][3].setValue(3);
+	//tileArray[0][0].setValue(9);
+	//tileArray[0][1].setValue(9);
+	//tileArray[0][2].setValue(10);
 
 
 	//tileArray[3][0].setValue(5);
@@ -519,7 +520,7 @@ void GameBoard::spawnNextTile()
 }
 
 
-bool GameBoard::isGameOver()
+int GameBoard::isGameOver()
 {
 	//Now we've made another move, we can check if the game is over.
 	//If the game is over, the board must be full:
@@ -571,11 +572,25 @@ bool GameBoard::isGameOver()
 
 		if (gameOver)
 		{
-			return true;
+			return 1;
 		}
 	}
 
-	return false;
+	//If we reach here - the game hasn't been lost. But has it been won?
+
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			if (tileArray[x][y].getValue() == 11)
+			{
+				//The game has been won!
+				return 2;
+			}
+		}
+	}
+
+	return 0;
 }
 
 Tile** GameBoard::getTileArray()

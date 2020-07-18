@@ -9,6 +9,7 @@ void Engine::update(float dtAsSeconds)
 	bool tilesUpdated = true;
 	int numFull = 0;
 
+
 	for (int x = 0; x < 4; x++)
 	{
 		for (int y = 0; y < 4; y++)
@@ -59,12 +60,21 @@ void Engine::update(float dtAsSeconds)
 		m_GB.finaliseMovement();
 		m_GB.spawnNextTile();
 		m_HUD.setScore(m_GB.score());
-		if (m_GB.isGameOver())
+		int gameOver = m_GB.isGameOver();
+		if (gameOver == 1)
 		{
 			m_Playing = false;
-			std::cout << "Game Over!" << endl;
+			m_HUD.setGameOver(false);
+			//std::cout << "Game Over!" << endl;
+		}
+		else if (gameOver == 2)
+		{
+			m_Playing = false;
+			m_HUD.setGameOver(true);
 		}
 	}
+
+	//std::cout << "ISPLAYING? " << m_Playing << endl;
 
 
 }
