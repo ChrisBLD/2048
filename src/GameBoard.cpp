@@ -44,10 +44,10 @@ GameBoard::GameBoard()
 
 	//Test assignments
 
-	tileArray[0][0].setValue(0);
-	tileArray[0][1].setValue(1);
-	tileArray[0][2].setValue(1);
-	tileArray[0][3].setValue(3);
+	//tileArray[0][0].setValue(0);
+	//tileArray[0][1].setValue(1);
+	//tileArray[0][2].setValue(1);
+	//tileArray[0][3].setValue(3);
 
 	//tileArray[0][2].setValue(3);
 	//tileArray[0][3].setValue(3);
