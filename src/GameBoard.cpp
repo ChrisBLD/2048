@@ -5,9 +5,7 @@
 
 GameBoard::GameBoard()
 {
-	m_Texture = TextureHolder::GetTexture("assets/gameboard.png");
-
-	m_Sprite.setTexture(m_Texture);
+	m_Sprite.setTexture(TextureHolder::GetTexture("assets/gameboard.png"));
 
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;

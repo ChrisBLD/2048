@@ -8,7 +8,6 @@ Engine::Engine()
 	resolution.y = VideoMode::getDesktopMode().height;
 
 	m_Window.create(VideoMode(resolution.x, resolution.y), "2048", Style::Fullscreen);
-
 }
 
 void Engine::run()

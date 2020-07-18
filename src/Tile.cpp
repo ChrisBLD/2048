@@ -115,7 +115,7 @@ void Tile::setValue(int val)
 	case 0:
 		//This doesn't technically matter since the tile won't be drawn
 		//if it doesn't have a value
-		m_Texture = TextureHolder::GetTexture("assets/default.png");
+		m_Sprite.setTexture(TextureHolder::GetTexture("assets/default.png"));
 		m_isEmpty = true;
 		break;
 	default:
@@ -123,11 +123,10 @@ void Tile::setValue(int val)
 		string numStr = to_string(number);
 		stringstream ss;
 		ss << "assets/tile" << numStr << ".png";
-		m_Texture = TextureHolder::GetTexture(ss.str());
+		m_Sprite.setTexture(TextureHolder::GetTexture(ss.str()));
 		m_isEmpty = false;
 		break;
 	}
-	m_Sprite.setTexture(m_Texture);
 }
 
 void Tile::setPosition(Vector2f pos)

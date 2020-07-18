@@ -15,9 +15,6 @@ struct TileCopy {
 class GameBoard
 {
 private:
-	//Texture for game board
-	Texture m_Texture;
-
 	//Constant size of tiles
 	const float SIZE_OF_TILE = 160.0f;
 
