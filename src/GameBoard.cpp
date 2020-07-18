@@ -44,10 +44,10 @@ GameBoard::GameBoard()
 
 	//Test assignments
 
-	//tileArray[0][0].setValue(4);
-	//tileArray[0][1].setValue(3);
-	//tileArray[0][2].setValue(2);
-	//tileArray[0][3].setValue(2);
+	tileArray[0][0].setValue(0);
+	tileArray[0][1].setValue(1);
+	tileArray[0][2].setValue(1);
+	tileArray[0][3].setValue(3);
 
 	//tileArray[0][2].setValue(3);
 	//tileArray[0][3].setValue(3);
@@ -91,6 +91,7 @@ bool GameBoard::move(Tile** tileArrayToUse)
 			tileArrayCopy[i][j].moveTo = -1;
 			//moveTo = -1 is a default value indicating that the tile doesn't need to be moved
 			tileArrayToUse[i][j].setMoveTo(-1);
+			tileArray[i][j].setCombined(false);
 		}
 	}
 
@@ -269,6 +270,14 @@ bool GameBoard::moveRight()
 {
 	
 	bool exec = move(tileArray);
+
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			tileArray[x][y].setCombined(tileArrayCopy[x][y].combined);
+		}
+	}
 	
 	if (exec)
 	{
@@ -322,8 +331,10 @@ bool GameBoard::moveLeft()
 		for (int y = 0; y < 4; y++)
 		{
 			tileArrayCopy[valMap[x]][valMap[y]].value = tileArrayCopyRotate[x][y].value;
+			tileArray[valMap[x]][valMap[y]].setCombined(tileArrayCopy[x][y].combined);
 		}
 	}
+
 
 	if (exec)
 	{
@@ -378,8 +389,10 @@ bool GameBoard::moveUp()
 		for (int y = 0; y < 4; y++)
 		{
 			tileArrayCopy[y][valMap[x]].value = tileArrayCopyRotate[x][y].value;
+			tileArray[y][valMap[x]].setCombined(tileArrayCopy[x][y].combined);
 		}
 	}
+
 
 
 
@@ -436,8 +449,10 @@ bool GameBoard::moveDown()
 		for (int y = 0; y < 4; y++)
 		{
 			tileArrayCopy[valMap[y]][x].value = tileArrayCopyRotate[x][y].value;
+			tileArray[valMap[y]][x].setCombined(tileArrayCopy[x][y].combined);
 		}
 	}
+
 
 
 	if (exec)
@@ -455,8 +470,8 @@ bool GameBoard::moveDown()
 void GameBoard::setMoveMade(bool dir)
 {
 	m_moveMade = dir;
+	m_ComboTime = !dir;
 }
-
 
 void GameBoard::finaliseMovement()
 {
@@ -470,8 +485,6 @@ void GameBoard::finaliseMovement()
 	}
 	setMoveMade(false);
 }
-
-
 
 void GameBoard::spawnNextTile()
 {
@@ -573,6 +586,11 @@ Tile** GameBoard::getTileArray()
 bool GameBoard::moveBeenMade()
 {
 	return m_moveMade;
+}
+
+bool GameBoard::comboAnim()
+{
+	return m_ComboTime;
 }
 
 int GameBoard::score()

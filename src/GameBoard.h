@@ -31,6 +31,9 @@ private:
 	//Boolean to monitor if a move has been made or not
 	bool m_moveMade = false;
 
+	//Boolean to check if we need to start combo animation
+	bool m_ComboTime = false;
+
 	//Integer to track score to add to UI
 	int m_Score;
 
@@ -72,6 +75,9 @@ public:
 
 	//Check if a move has been made
 	bool moveBeenMade();
+
+	//Check if it's time to start combo animation
+	bool comboAnim();
 
 	//See what score we need to add
 	int score();

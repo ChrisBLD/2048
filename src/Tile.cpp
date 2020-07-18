@@ -97,7 +97,59 @@ void Tile::update(float elapsedTime)
 		}
 		break;
 	}
+
 	m_Sprite.setPosition(m_Position);
+}
+
+void Tile::pulse(float elapsedTime)
+{
+	elapsedTime *= 10.0f;
+	Vector2f currentScale = m_Sprite.getScale();
+	if (m_ScaleDir)
+	{
+		//True = scale up
+		if (currentScale.x < MAX_SCALE)
+		{
+			currentScale.x += (MAX_SCALE - 1) * elapsedTime;
+			currentScale.y += (MAX_SCALE - 1) * elapsedTime;
+			//We need to see how much "bigger" the tile has gotten
+			m_Position.x = m_StartingPos.x - ((m_TileSize.x * currentScale.x) - m_TileSize.x) / 2.0f;
+			m_Position.y = m_StartingPos.y - ((m_TileSize.y * currentScale.y) - m_TileSize.y) / 2.0f;
+		}
+		else
+		{
+			currentScale.x = MAX_SCALE;
+			currentScale.y = MAX_SCALE;
+			m_Position.x = m_StartingPos.x - ((m_TileSize.x * currentScale.x) - m_TileSize.x) / 2.0f;
+			m_Position.y = m_StartingPos.y - ((m_TileSize.y * currentScale.y) - m_TileSize.y) / 2.0f;
+			m_ScaleDir = false;
+		}
+	}
+	else
+	{
+		//False - scale down
+		if (currentScale.x > 1.0f)
+		{
+			currentScale.x -= (MAX_SCALE - 1) * elapsedTime;
+			currentScale.y -= (MAX_SCALE - 1) * elapsedTime;
+			m_Position.x = m_StartingPos.x - ((m_TileSize.x * currentScale.x) - m_TileSize.x) / 2.0f;
+			m_Position.y = m_StartingPos.y - ((m_TileSize.y * currentScale.y) - m_TileSize.y) / 2.0f;
+		}
+		else
+		{
+			currentScale.x = 1.0f;
+			currentScale.y = 1.0f;
+			m_Position.x = m_StartingPos.x;
+			m_Position.y = m_StartingPos.y;
+			m_ScaleDir = true;
+			m_beenCombined = false;
+		}
+	}
+
+	m_Sprite.setPosition(m_Position);
+	m_Sprite.setScale(currentScale);
+
+	std::cout << "Pulsing: " << m_Position.x << ", " << m_Position.y << ", Scale: " << currentScale.x << ", " << currentScale.y << endl;
 }
 
 void Tile::setStartingPos(Vector2f startingPos)
@@ -116,6 +168,7 @@ void Tile::setValue(int val)
 		//This doesn't technically matter since the tile won't be drawn
 		//if it doesn't have a value
 		m_Sprite.setTexture(TextureHolder::GetTexture("assets/default.png"));
+		m_TileSize = Vector2f(m_Sprite.getLocalBounds().width, m_Sprite.getLocalBounds().height);
 		m_isEmpty = true;
 		break;
 	default:
@@ -124,6 +177,7 @@ void Tile::setValue(int val)
 		stringstream ss;
 		ss << "assets/tile" << numStr << ".png";
 		m_Sprite.setTexture(TextureHolder::GetTexture(ss.str()));
+		m_TileSize = Vector2f(m_Sprite.getLocalBounds().width, m_Sprite.getLocalBounds().height);
 		m_isEmpty = false;
 		break;
 	}
@@ -155,6 +209,14 @@ void Tile::setAnimate(bool anim, int dir)
 void Tile::setSpeed(int currentPos)
 {
 	m_Speed = BASE_SPEED * abs(m_moveTo - currentPos);
+}
+
+void Tile::resetParams()
+{
+	m_Sprite.setScale(Vector2f(1.0f, 1.0f));
+	m_Position.x = m_StartingPos.x;
+	m_Position.y = m_StartingPos.y;
+	m_Sprite.setPosition(m_Position);
 }
 
 bool Tile::isEmpty()
@@ -195,4 +257,6 @@ void Tile::restart()
 	m_beenCombined = false;
 	m_isEmpty = true;
 	m_Dir = 0;
+	m_ScaleDir = true;
+	//m_Sprite.setOrigin(m_Sprite.getLocalBounds().width / 2.0f, m_Sprite.getLocalBounds().height / 2.0f);
 }

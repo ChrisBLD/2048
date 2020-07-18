@@ -26,6 +26,25 @@ void Engine::update(float dtAsSeconds)
 		}
 	}
 
+	if (tilesUpdated && m_GB.comboAnim())
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				if (m_GB.getTileArray()[x][y].getCombined())
+				{
+
+					m_GB.getTileArray()[x][y].pulse(dtAsSeconds);
+				}
+				else
+				{
+					m_GB.getTileArray()[x][y].resetParams();
+				}
+			}
+		}
+	}
+
 	//Spawn the first tiles and set score to 0
 	if (numFull <= 1)
 	{
@@ -36,6 +55,7 @@ void Engine::update(float dtAsSeconds)
 
 	if (tilesUpdated && m_GB.moveBeenMade())
 	{
+
 		m_GB.finaliseMovement();
 		m_GB.spawnNextTile();
 		m_HUD.setScore(m_GB.score());
