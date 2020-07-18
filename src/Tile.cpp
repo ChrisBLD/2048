@@ -149,7 +149,6 @@ void Tile::pulse(float elapsedTime)
 	m_Sprite.setPosition(m_Position);
 	m_Sprite.setScale(currentScale);
 
-	std::cout << "Pulsing: " << m_Position.x << ", " << m_Position.y << ", Scale: " << currentScale.x << ", " << currentScale.y << endl;
 }
 
 void Tile::setStartingPos(Vector2f startingPos)
